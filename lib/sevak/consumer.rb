@@ -1,9 +1,9 @@
 module Sevak
 
-  # base class for all queue consumers, all consumers should inherit from the base Sevak::Consumer and must implement a
+  # Base class for all queue consumers, all consumers should inherit from the base Sevak::Consumer and must implement a
   # run method. The run method should implement the business logic.
 
-  class Base
+  class ConsumerBase
 
     DEFAULT_PREFETCH_COUNT = 10
 
@@ -86,7 +86,7 @@ module Sevak
 
   end
 
-  class Consumer < Base
+  class Consumer < ConsumerBase
 
     # Set the queue name for the consumer
     queue_name 'sevak.default'

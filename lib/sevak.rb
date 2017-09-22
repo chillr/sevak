@@ -85,6 +85,7 @@ module Sevak
               else
                 File.open('log/sevak_test.log', 'a')
               end
+
     # TODO make configurable
     logfile.sync = true
     @logger = Logger.new(logfile, 'weekly')
@@ -104,3 +105,6 @@ module Sevak
   end
 
 end
+
+require 'sevak/consumer'
+require 'sevak/publisher'
