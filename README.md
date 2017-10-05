@@ -31,3 +31,7 @@ To receive message from this queue and process the message a create a consumer.
     end
 
 The return status can have three values :ok, :error, :retry.
+
+Publishing to the queue
+
+    Publisher.publish('in.chillr.email', { name: 'Deepak Kumar', message: 'welcome', email: 'deepak@chillr.in' }) 
