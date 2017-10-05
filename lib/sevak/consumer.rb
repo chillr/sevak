@@ -5,6 +5,8 @@ module Sevak
 
   class ConsumerBase
 
+    include Core
+
     DEFAULT_PREFETCH_COUNT = 10
 
     # class methods
@@ -29,14 +31,6 @@ module Sevak
       @channel ||= connection.create_channel
     end
 
-    def connection
-      ::Sevak.establish_connection
-    end
-
-    def config
-      ::Sevak.config
-    end
-
     def message_count
       queue.message_count
     end
@@ -46,6 +40,9 @@ module Sevak
 
       queue.subscribe(manual_ack: true, exclusive: false) do |delivery_info, metadata, payload|
         body = JSON.parse(payload)
+
+        # p delivery_info
+        # p metadata
 
         begin
           status = run(body)
@@ -94,7 +91,7 @@ module Sevak
     def run(payload)
       # implement business logic in the corresponding consumer, the run method should respond with
       # status :ok, :error, :retry after the processing is over
-      Sevak.log("Implement run method. Payload: #{payload.inspect}")
+      Sevak.log("Implement run method. Payload: #{payload.inspect} #{}")
       :ok
     end
   end

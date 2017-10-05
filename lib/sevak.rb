@@ -5,7 +5,6 @@ require 'json'
 require 'logger'
 require 'fileutils'
 require 'sevak/version'
-require 'sevak/consumer'
 
 module Sevak
 
@@ -106,5 +105,6 @@ module Sevak
 
 end
 
+require 'sevak/core'
 require 'sevak/consumer'
 require 'sevak/publisher'

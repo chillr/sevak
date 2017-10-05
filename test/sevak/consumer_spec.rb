@@ -59,5 +59,14 @@ module Sevak
       sleep 1
       assert_equal consumer.queue.message_count, 0
     end
+
+    it 'reads the sent messagr from the queue' do
+      while(consumer.queue.message_count > 0) do
+        consumer.queue.pop
+      end
+
+      Publisher.publish('timestamp', { time: Time.now.to_i } )
+
+    end
   end
 end
