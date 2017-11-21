@@ -7,6 +7,16 @@ Install
     
     gem install sevak
 
+Congigure
+
+    Sevak.configure do |f|
+        f.host = 'localhost'
+        f.port = '5672'
+        f.user = 'username'
+        f.password = 'password'
+        f.prefetch_count = 10
+    end
+
 In your code to publish some message to a queue 'sms'.
 
     
