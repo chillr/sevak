@@ -1,3 +1,4 @@
+require 'bundler'
 Bundler.require(:default)
 
 require 'yaml'
@@ -40,7 +41,11 @@ module Sevak
     private
 
     def load_configuration_from_yml
-      @config = YAML.load(File.read('config/default.yml'))
+      @config = {}
+
+      if File.exists?('config/sevak.yml')
+        @config = YAML.load(File.read('config/sevak.yml'))
+      end
     end
 
     def set(key, val)

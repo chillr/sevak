@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     sevak (0.2.0)
+      bunny
 
 GEM
   remote: https://rubygems.org/
@@ -65,4 +66,4 @@ DEPENDENCIES
   sevak!
 
 BUNDLED WITH
-   1.15.4
+   1.16.0
