@@ -1,6 +1,4 @@
-require 'bundler'
-Bundler.require(:default)
-
+require 'bunny'
 require 'yaml'
 require 'json'
 require 'logger'
