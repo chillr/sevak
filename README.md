@@ -1,47 +1,71 @@
-Sevak gem provides makes it easy to send and receive messages from rabbitmq queues. It is buit on top of the bunny gem.
-
+Sevak gem makes it easy to send and receive messages from rabbitmq queues. It is built on top of the bunny gem.
+It also supports delayed queuing using [rabbitmq delayed exchange plugin](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange)
 
 Usage:
+
+Dependencies
+
+* [rabbitmq delayed exchange plugin](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange)
+To install this plugin:
+    1. Download the latest build for the plugin from [here](http://www.rabbitmq.com/community-plugins.html)
+    2. Enable the plugin using command:
+
+        rabbitmq-plugins enable rabbitmq_delayed_message_exchange
 
 Install
     
     gem install sevak
 
-Congigure
+Configuration
+    Create a file under `config/initializers` and add following lines to that file:
 
-    Sevak.configure do |f|
-        f.host = 'localhost'
-        f.port = '5672'
-        f.user = 'username'
-        f.password = 'password'
-        f.prefetch_count = 10
-    end
+        Sevak.configure do |f|
+            f.host = 'localhost'
+            f.port = '5672'
+            f.user = 'username'
+            f.password = 'password'
+            f.prefetch_count = 10
+        end
 
-In your code to publish some message to a queue 'sms'.
 
+Usage
+
+### Publishing to a queue
+
+To publish any message to a queue use the following syntax:
     
-    Sevak::Publisher.publish('sms', message = { name: 'Deepak', msisdn: '9078657543' })
+    Sevak::Publisher.publish(*queue_name*, *message*)
 
 If the queue is not present already it will be created automatically.
 
+Example usage: 
 
-To receive message from this queue and process the message a create a consumer.
+    Sevak::Publisher.delayed_publish('sms', message = { name: 'Deepak', msisdn: '9078657543' })
 
+### Publishing to a queue with a delay
+
+To publish any message to a queue with some delay use the following syntax:
+    
+    Sevak::Publisher.publish(*queue_name*, *message*, *delay in milliseconds*)
+
+Exaple usage:
+
+    Sevak::Publisher.delayed_publish('sms', message = { name: 'Deepak', msisdn: '9078657543' }, 10000)
+
+This will publish the message to an exchange which will route the message to the specified queue with a delay of 10 seconds.
+
+### Receiving messages from ths queues
+To receive message from this queue and process the message create a consumer file inside your project under `app/controllers`.
 
     class SmsConsumer < Sevak::Consumer
         
         queue_name 'sms'
         
         def run(message)
-            status = process(message)
-            status
+            *process the message*
         end
         
         ..
     end
 
 The return status can have three values :ok, :error, :retry.
-
-Publishing to the queue
-
-    Publisher.publish('in.chillr.email', { name: 'Deepak Kumar', message: 'welcome', email: 'deepak@chillr.in' }) 
