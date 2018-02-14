@@ -18,11 +18,11 @@ module Sevak
     end
 
     def queue(queue_name)
-      @queue ||= channel.queue(queue_name)
+      channel.queue(queue_name)
     end
 
     def exchange(queue_name)
-      @exchange ||= channel.exchange("#{queue_name}_exchange", type: "x-delayed-message", arguments: { "x-delayed-type" => "direct" })
+      channel.exchange("#{queue_name}_exchange", type: "x-delayed-message", arguments: { "x-delayed-type" => "direct" })
     end
 
     def publish_exchange(queue_name, message, delay)
