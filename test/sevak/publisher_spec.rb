@@ -30,8 +30,8 @@ module Sevak
     describe '#queue' do
       it 'should create a queue with the given name' do
         @pub.queue(@queue_name)
-        refute_nil @pub.instance_variable_get(:@queue)
-        assert_equal @pub.instance_variable_get(:@queue).name, @queue_name
+        assert_equal @pub.instance_variable_get(:@channel).queues.count, 1
+        assert_includes @pub.instance_variable_get(:@channel).queues.keys, @queue_name
       end
     end
 
@@ -44,15 +44,16 @@ module Sevak
     describe '#exchange' do
       before do
         @pub.exchange('sms')
+        @exchange_name = "#{@queue_name}_exchange"
       end
 
       it 'should create an exchange with name #{@queue_name}_exchange specified' do
-        refute_nil @pub.instance_variable_get(:@exchange)
-        assert_equal @pub.instance_variable_get(:@exchange).name, "#{@queue_name}_exchange"
+        assert_equal @pub.instance_variable_get(:@channel).exchanges.count, 1
+        assert_includes @pub.instance_variable_get(:@channel).exchanges.keys, @exchange_name
       end
 
       it 'should create an exchange with type x-delayed-message' do
-        assert_equal @pub.instance_variable_get(:@exchange).type, "x-delayed-message"
+        assert_equal @pub.instance_variable_get(:@channel).exchanges[@exchange_name].type, "x-delayed-message"
       end
     end
 
