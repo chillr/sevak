@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['deepakkumarnd@gmail.com']
 
   spec.summary       = %q{Consumers for chillr api}
-  spec.description   = %q{Consumers for chillr api}
+  spec.description   = %q{Sevak lets you easily add consumers in your rails app}
   spec.homepage      = ''
   spec.license       = 'MIT'
 
