@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Consumers for chillr api}
   spec.description   = %q{Sevak lets you easily add consumers in your rails app}
-  spec.homepage      = ''
+  spec.homepage      = 'https://github.com/chillr/sevak'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
