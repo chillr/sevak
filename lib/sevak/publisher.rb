@@ -10,7 +10,7 @@ module Sevak
     end
 
     def self.delayed_publish(queue_name, message, delay = 0)
-      instance.publish_exchange(queue_name, message, delay)
+      instance.publish_exchange(queue_name, message, delay.to_i)
     end
 
     def channel
