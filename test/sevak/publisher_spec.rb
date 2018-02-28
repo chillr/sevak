@@ -13,11 +13,11 @@ module Sevak
     end
 
     it 'should have a publish method' do
-      assert_equal true, Publisher.respond_to?(:publish)
+      assert Publisher.respond_to?(:publish)
     end
 
     it 'should have a delayed_publish method' do
-      assert_equal true, Publisher.respond_to?(:delayed_publish)
+      assert Publisher.respond_to?(:delayed_publish)
     end
 
     describe '#channel' do
@@ -28,10 +28,17 @@ module Sevak
     end
 
     describe '#queue' do
-      it 'should create a queue with the given name' do
+      before do
         @pub.queue(@queue_name)
+      end
+
+      it 'should create a queue with the given name' do
         assert_equal @pub.instance_variable_get(:@channel).queues.count, 1
         assert_includes @pub.instance_variable_get(:@channel).queues.keys, @queue_name
+      end
+
+      it 'should create a durable queue' do
+        assert @pub.instance_variable_get(:@channel).queues[@queue_name].durable?
       end
     end
 
@@ -55,17 +62,21 @@ module Sevak
       it 'should create an exchange with type x-delayed-message' do
         assert_equal @pub.instance_variable_get(:@channel).exchanges[@exchange_name].type, "x-delayed-message"
       end
+
+      it 'should create a durable exchange' do
+        assert @pub.instance_variable_get(:@channel).exchanges[@exchange_name].durable?
+      end
     end
 
     describe '#delayed_publish' do
       before do
         @pub.queue(@queue_name).purge
-        Publisher.delayed_publish(@queue_name, { msisdn: '+919894321290', message: 'Testing the delayed message publish' }, 10000)
+        Publisher.delayed_publish(@queue_name, { msisdn: '+919894321290', message: 'Testing the delayed message publish' }, 5000)
       end
 
       it 'should route messages from the exchange to the queue' do
         assert_equal 0, @pub.queue(@queue_name).message_count
-        sleep 20
+        sleep 5
         assert_equal 1, @pub.queue(@queue_name).message_count
       end
     end

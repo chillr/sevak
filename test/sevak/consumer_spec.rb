@@ -60,7 +60,7 @@ module Sevak
       assert_equal consumer.queue.message_count, 0
     end
 
-    it 'reads the sent messagr from the queue' do
+    it 'reads the sent message from the queue' do
       while(consumer.queue.message_count > 0) do
         consumer.queue.pop
       end

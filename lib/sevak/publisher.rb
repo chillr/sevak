@@ -18,16 +18,16 @@ module Sevak
     end
 
     def queue(queue_name)
-      channel.queue(queue_name)
+      channel.queue(queue_name, durable: true)
     end
 
     def exchange(queue_name)
-      channel.exchange("#{queue_name}_exchange", type: "x-delayed-message", arguments: { "x-delayed-type" => "direct" })
+      channel.exchange("#{queue_name}_exchange", type: 'x-delayed-message', durable: true, arguments: { 'x-delayed-type' => 'direct' })
     end
 
     def publish_exchange(queue_name, message, delay)
       queue(queue_name).bind(exchange(queue_name))
-      exchange(queue_name).publish(message.to_json, headers: { "x-delay" => delay })
+      exchange(queue_name).publish(message.to_json, headers: { 'x-delay' => delay })
     end
   end
 end
