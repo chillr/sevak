@@ -1,3 +1,7 @@
+# Current version
+
+    0.4.3
+
 Sevak gem makes it easy to send and receive messages from rabbitmq queues. It is built on top of the bunny gem.
 It also supports delayed queuing using [rabbitmq delayed exchange plugin](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange)
 
@@ -13,7 +17,7 @@ To install this plugin:
     rabbitmq-plugins enable rabbitmq_delayed_message_exchange
 
 # Installation
-    
+
     gem install sevak
 
 # Configuration
@@ -33,19 +37,19 @@ Create a file under `config/initializers` and add following lines to that file:
 ### Publishing to a queue
 
 To publish any message to a queue use the following syntax:
-    
+
     Sevak::Publisher.publish(*queue_name*, *message*)
 
 If the queue is not present already it will be created automatically.
 
-Example: 
+Example:
 
     Sevak::Publisher.delayed_publish('sms', message = { name: 'Deepak', msisdn: '9078657543' })
 
 ### Publishing to a queue with a delay
 
 To publish any message to a queue with some delay use the following syntax:
-    
+
     Sevak::Publisher.publish(*queue_name*, *message*, *delay in milliseconds*)
 
 Example:
@@ -58,13 +62,13 @@ This will publish the message to an exchange which will route the message to the
 To receive message from this queue and process the message create a consumer file for each queue in your project under `app/consumers`.
 
     class SmsConsumer < Sevak::Consumer
-        
+
         queue_name 'sms'
-        
+
         def run(message)
             *process the message*
         end
-        
+
         ..
     end
 
