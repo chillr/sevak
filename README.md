@@ -22,6 +22,21 @@ To install this plugin:
 # Installation
 
     gem install sevak
+    
+# Make sure the rabbitmq server is running
+
+You can either install and run the rabbitmq server from the appropriate package for your os or you can run the preconfigured docker image for local testing.
+
+The image can be found here.
+
+https://hub.docker.com/r/deepakkumarnd/sevak/
+
+You can run the rabbitmq by doing the following step 
+
+    docker pull deepakkumarnd/sevak
+    docker run -d --name rabbitmq_test -p 15672:15672 -p 5672:5672 deepakkumarnd/sevak
+
+After this you will be able to access the management console by going to http://localhost:15672. You can login using guest, guest as username and password.
 
 # Configuration
 
