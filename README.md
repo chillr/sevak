@@ -76,3 +76,10 @@ To receive message from this queue and process the message create a consumer fil
     end
 
 The return status can have three values :ok, :error, :retry.
+
+### Run the preconfigured docker container for testing purpose
+
+https://hub.docker.com/r/deepakkumarnd/sevak/
+
+docker pull deepakkumarnd/sevak
+docker run -d --name rabbitmq_test -p 15672:15672 -p 5672:5672 deepakkumarnd/sevak
