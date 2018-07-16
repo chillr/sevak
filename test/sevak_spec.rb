@@ -8,22 +8,43 @@ describe Sevak do
 
   describe Sevak::Config do
 
+    let(:config) { Sevak::Consumer.new.config }
+
+    describe 'Default configuration' do
+      let(:config) { Sevak::Consumer.new.config }
+
+      it 'has a default configuration' do
+        default = {
+          'host': 'localhost',
+          'port': '5672',
+          'user': 'guest',
+          'password': 'guest',
+          'prefetch_count': 10,
+          'autoscale': false,
+          'max_process_limit': 10,
+          'min_process_limit': 1
+        }
+
+        assert_equal config, default
+      end
+    end
+
     it 'returns the configuration object on initialize' do
       assert_equal Sevak.configure.class, Sevak::Config
     end
 
     it 'loads the default configuration' do
-      assert_equal Sevak.config.host, 'localhost'
+      assert_equal config.host, 'localhost'
     end
 
     it 'allow to add custom configuration' do
-      assert_equal Sevak.config.port, '5672'
+      assert_equal config.port, '5672'
 
       Sevak.configure do |f|
         f.port = '1234'
       end
 
-      assert_equal Sevak.config.port, '1234'
+      assert_equal config.port, '1234'
     end
 
     it 'raise error for unsupported configuration' do
@@ -44,7 +65,7 @@ describe Sevak do
     end
 
     it 'establish_connection to a rabbitmq server' do
-      assert Sevak.establish_connection
+      assert Sevak::Consumer.new.connection
     end
   end
 
@@ -57,7 +78,7 @@ describe Sevak do
     end
 
     it 'logs to the standard output' do
-      assert Sevak.log('This message will be available in log/sevak_test.log')
+      assert Sevak::Consumer.new.log('This message will be available in log/sevak_test.log')
     end
   end
 

@@ -76,7 +76,7 @@ module Sevak
 
       it 'should route messages from the exchange to the queue' do
         assert_equal 0, @pub.queue(@queue_name).message_count
-        sleep 5
+        sleep 10
         assert_equal 1, @pub.queue(@queue_name).message_count
       end
     end
