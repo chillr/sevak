@@ -15,17 +15,17 @@ describe Sevak do
 
       it 'has a default configuration' do
         default = {
-          'host': 'localhost',
-          'port': '5672',
-          'user': 'guest',
-          'password': 'guest',
-          'prefetch_count': 10,
-          'autoscale': false,
-          'max_process_limit': 10,
-          'min_process_limit': 1
+          'host' => 'localhost',
+          'port' => '5672',
+          'user' => 'guest',
+          'password' => 'guest',
+          'prefetch_count' => 10,
+          'autoscale' => false,
+          'max_process_limit' => 10,
+          'min_process_limit' => 1
         }
 
-        assert_equal config, default
+        assert_equal config.to_h, default
       end
     end
 

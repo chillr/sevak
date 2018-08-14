@@ -2,7 +2,6 @@ module Sevak
   module Core
     def connection
       return @conn if @conn
-
       @conn ||= Bunny.new(
         host: config.host,
         port: config.port,

@@ -1,7 +1,7 @@
 module Sevak
   module Autoscale
-    Signal.trap("TERM") { Process.waitall; exit }
-    Signal.trap("INT") { Process.waitall; exit  }
+    Signal.trap('TERM') { Process.waitall; exit }
+    Signal.trap('INT') { Process.waitall; exit  }
 
     def pids
       @pids ||= []
@@ -16,22 +16,19 @@ module Sevak
     end
 
     def fork_process
-      print "Forking process ..."
-
       begin
         pid = fork do
           trap('HUP') { stop }
           trap('TERM') { stop }
           trap('INT') { stop }
 
-          Consumer.new.start_worker
+          self.class.new.start_worker
         end
 
         pids.push(pid)
 
-        print "\b\b\b#{pid}. Process count #{pids.size} \n"
       rescue => e
-        puts "Unable to fork process #{e.message}"
+        log("Unable to fork process #{e.message}")
       end
     end
 
@@ -44,16 +41,13 @@ module Sevak
 
     def kill_process(pid)
       return if pid.nil?
-      print "Killing #{pid} ..."
 
       begin
         Process.kill("HUP", pid)
         Process.wait
       rescue => e
-        puts "Unable to kill process #{e.message}"
+        log("Unable to kill process #{e.message}")
       end
-
-      print "\b\b\bDone \n"
     end
 
     def process_count
@@ -65,17 +59,36 @@ module Sevak
       exit
     end
 
+    def calculate_average_load
+      ratio = begin
+        message_count / process_count
+      rescue ZeroDivisionError => e
+        10
+      end
+
+      if ratio >= 10
+        :high
+      elsif ratio <= 2
+        :low
+      else
+        :medium
+      end
+    end
+
     def start_master_worker
+      fork_process
+
       loop do
-        avg_load = [:low, :medium, :high][rand(0..2)]
+        avg_load = calculate_average_load
 
         if (avg_load == :high) && (pids.size < config.max_process_limit)
-          pid = fork_process
+          fork_process
         elsif (avg_load == :low) && (process_count > config.min_process_limit)
           pid = pids.shift
           kill_process(pid) if pid
         else
         end
+
         sleep 5
       end
     rescue => e

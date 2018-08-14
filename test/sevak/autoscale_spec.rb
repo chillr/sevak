@@ -7,6 +7,7 @@ module Sevak
       Sevak.configure do |f|
         f.host = 'localhost'
         f.port = '5672'
+        f.autoscale = true
       end
     end
 
@@ -16,5 +17,8 @@ module Sevak
       assert master_consumer.respond_to?(:start_master_worker)
     end
 
+    it 'creates at least one worker process' do
+      assert master_consumer.process_count, 1
+    end
   end
 end

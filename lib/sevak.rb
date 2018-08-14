@@ -23,15 +23,15 @@ module Sevak
 
     def initialize
       @config = {
-        'host': 'localhost',
-        'port': '5672',
-        'user': 'guest',
-        'password': 'guest',
-        'prefetch_count': 10,
-        'autoscale': false,
-        'max_process_limit': 10,
-        'min_process_limit': 1
-      }.with_indifferent_access
+        'host' => 'localhost',
+        'port' => '5672',
+        'user' => 'guest',
+        'password' => 'guest',
+        'prefetch_count' => 10,
+        'autoscale' => false,
+        'max_process_limit' => 10,
+        'min_process_limit' => 1
+      }
 
       load_configuration_from_yml
     end
@@ -53,6 +53,10 @@ module Sevak
       else
         get(name)
       end
+    end
+
+    def to_h
+      @config
     end
 
     private
