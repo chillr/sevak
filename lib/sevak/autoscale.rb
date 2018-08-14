@@ -81,7 +81,7 @@ module Sevak
       loop do
         avg_load = calculate_average_load
 
-        if (avg_load == :high) && (pids.size < config.max_process_limit)
+        if (avg_load == :high) && (process_count < config.max_process_limit)
           fork_process
         elsif (avg_load == :low) && (process_count > config.min_process_limit)
           pid = pids.shift
