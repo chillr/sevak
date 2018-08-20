@@ -11,9 +11,28 @@ module Sevak
   class Config
 
     # allowed configurations
-    CONFIGURATION = %w(host port user password prefetch_count)
+    CONFIGURATION = %w(
+      host
+      port
+      user
+      password
+      prefetch_count
+      autoscale
+      max_process_limit
+      min_process_limit).freeze
 
     def initialize
+      @config = {
+        'host' => 'localhost',
+        'port' => '5672',
+        'user' => 'guest',
+        'password' => 'guest',
+        'prefetch_count' => 10,
+        'autoscale' => false,
+        'max_process_limit' => 10,
+        'min_process_limit' => 1
+      }
+
       load_configuration_from_yml
     end
 
@@ -36,13 +55,15 @@ module Sevak
       end
     end
 
+    def to_h
+      @config
+    end
+
     private
 
     def load_configuration_from_yml
-      @config = {}
-
       if File.exists?('config/sevak.yml')
-        @config = YAML.load(File.read('config/sevak.yml'))
+        @config = @config.merge(YAML.load(File.read('config/sevak.yml')))
       end
     end
 
@@ -64,19 +85,6 @@ module Sevak
     config
   end
 
-  def self.establish_connection
-    return @conn if @conn
-
-    @conn ||= Bunny.new(
-      host: config.host,
-      port: config.port,
-      username: config.user,
-      password: config.password)
-
-    @conn.start
-    @conn
-  end
-
   def self.get_logger
     if !Dir.exist? 'log'
       FileUtils.mkdir('log')
@@ -93,11 +101,6 @@ module Sevak
     @logger = Logger.new(logfile, 'weekly')
   end
 
-  def self.log(data)
-    @logger ||= get_logger
-    @logger.info(data.inspect)
-  end
-
   def self.testing?
     defined?(SEVAK_ENV) && (SEVAK_ENV == 'test')
   end
@@ -109,5 +112,6 @@ module Sevak
 end
 
 require 'sevak/core'
+require 'sevak/autoscale'
 require 'sevak/consumer'
 require 'sevak/publisher'

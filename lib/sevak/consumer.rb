@@ -6,6 +6,7 @@ module Sevak
   class ConsumerBase
 
     include Core
+    include Autoscale
 
     DEFAULT_PREFETCH_COUNT = 10
 
@@ -36,6 +37,14 @@ module Sevak
     end
 
     def start
+      if config.autoscale
+        start_master_worker
+      else
+        start_worker
+      end
+    end
+
+    def start_worker
       channel.prefetch(config.prefetch_count || DEFAULT_PREFETCH_COUNT)
 
       queue.subscribe(manual_ack: true, exclusive: false) do |delivery_info, metadata, payload|
@@ -47,7 +56,7 @@ module Sevak
         begin
           status = run(body)
         rescue => ex
-          Sevak.log(exception_details(ex, payload))
+          log(exception_details(ex, payload))
           status = :error
         end
 
@@ -91,7 +100,7 @@ module Sevak
     def run(payload)
       # implement business logic in the corresponding consumer, the run method should respond with
       # status :ok, :error, :retry after the processing is over
-      Sevak.log("Implement run method. Payload: #{payload.inspect} #{}")
+      log("Implement run method. Payload: #{payload.inspect} #{}")
       :ok
     end
   end
