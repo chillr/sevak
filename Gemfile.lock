@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sevak (0.4.4)
+    sevak (0.5.0)
       bunny (~> 2.7)
 
 GEM

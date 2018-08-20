@@ -1,6 +1,6 @@
 # Current version
 
-    0.4.4
+    0.5.0
 
 Sevak gem makes it easy to send and receive messages from rabbitmq queues. It is built on top of the bunny gem.
 It also supports delayed queuing using [rabbitmq delayed exchange plugin](https://github.com/rabbitmq/rabbitmq-delayed-message-exchange)
