@@ -68,7 +68,7 @@ module Sevak
 
       if ratio >= 10
         :high
-      elsif ratio <= 2
+      elsif ratio <= 1
         :low
       else
         :medium
