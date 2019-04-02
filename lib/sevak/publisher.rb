@@ -14,7 +14,7 @@ module Sevak
     end
 
     def channel
-      @channel ||= connection.create_channel
+      (@channel && @channel.open?)? @channel : (@channel = connection.create_channel)
     end
 
     def queue(queue_name)
