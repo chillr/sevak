@@ -14,7 +14,15 @@ module Sevak
     end
 
     def channel
-      (@channel && @channel.open?)? @channel : (@channel = connection.create_channel)
+      attempt = 0
+      begin
+        (@channel && @channel.open?)? @channel : (@channel = connection.create_channel) 
+      rescue Bunny::ConnectionClosedError => e
+        attempt += 1
+        connection.start
+        sleep(0.001)
+        retry if attempt < 10
+      end
     end
 
     def queue(queue_name)

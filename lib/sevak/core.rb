@@ -20,6 +20,10 @@ module Sevak
         attempt += 1
         sleep(0.001)
         retry if attempt < 10
+      rescue Bunny::ConnectionClosedError => e
+        attempt += 1
+        sleep(0.001)
+        retry if attempt < 10
       end
     end
 
