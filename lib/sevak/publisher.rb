@@ -6,23 +6,29 @@ module Sevak
     include Singleton
 
     def self.publish(queue_name, message)
-      instance.queue(queue_name).publish(message.to_json)
+      attempt = 0
+      begin
+        instance.queue(queue_name).publish(message.to_json)
+      rescue => e #Bunny::ConnectionClosedError => e
+        attempt += 1
+        sleep(0.001)
+        attempt < 2 ? retry : raise
+      end
     end
 
     def self.delayed_publish(queue_name, message, delay = 0)
-      instance.publish_exchange(queue_name, message, delay.to_i)
+      attempt = 0
+      begin
+        instance.publish_exchange(queue_name, message, delay.to_i)
+      rescue => e #Bunny::ConnectionClosedError => e
+        attempt += 1
+        sleep(0.001)
+        attempt < 2 ? retry : raise 
+      end
     end
 
     def channel
-      attempt = 0
-      begin
-        (@channel && @channel.open?)? @channel : (@channel = connection.create_channel) 
-      rescue Bunny::ConnectionClosedError => e
-        attempt += 1
-        connection.start
-        sleep(0.001)
-        retry if attempt < 10
-      end
+      (@channel && @channel.open?)? @channel : (@channel = connection.create_channel)
     end
 
     def queue(queue_name)
