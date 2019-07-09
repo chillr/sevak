@@ -11,6 +11,12 @@ module Sevak
       end
     end
 
+    after do
+      Sevak.configure do |f|
+        f.autoscale = false
+      end
+    end
+
     let(:master_consumer) { Consumer.new }
 
     it 'respond to start_master_worker method' do

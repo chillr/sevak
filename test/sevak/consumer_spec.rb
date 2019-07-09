@@ -39,7 +39,6 @@ module Sevak
     end
 
     it 'reads the message from the queue' do
-      # consumer.stubs(:send_sms).returns(nil)
       consumer.stubs(:wait_for_threads).returns(nil)
 
       msg = { msisdn: '+919895821948', message: 'This is a test message' }

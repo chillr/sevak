@@ -71,12 +71,12 @@ module Sevak
     describe '#delayed_publish' do
       before do
         @pub.queue(@queue_name).purge
-        Publisher.delayed_publish(@queue_name, { msisdn: '+919894321290', message: 'Testing the delayed message publish' }, 5000)
+        Publisher.delayed_publish(@queue_name, { msisdn: '+919894321290', message: 'Testing the delayed message publish' }, 1000)
       end
 
       it 'should route messages from the exchange to the queue' do
         assert_equal 0, @pub.queue(@queue_name).message_count
-        sleep 10
+        sleep 2
         assert_equal 1, @pub.queue(@queue_name).message_count
       end
     end
