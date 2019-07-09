@@ -10,6 +10,13 @@ describe Sevak do
 
     let(:config) { Sevak::Consumer.new.config }
 
+    after do
+      # reset configuration after changing it
+      Sevak.configure do |f|
+        f.port = '5672'
+      end
+    end
+
     describe 'Default configuration' do
       let(:config) { Sevak::Consumer.new.config }
 
