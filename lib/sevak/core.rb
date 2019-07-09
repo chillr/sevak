@@ -15,15 +15,15 @@ module Sevak
       rescue Bunny::TCPConnectionFailedForAllHosts => e
         attempt += 1
         sleep(0.001)
-        retry if attempt < 10
+        attempt < 10 ? retry : raise
       rescue Bunny::TCPConnectionFailed => e
         attempt += 1
         sleep(0.001)
-        retry if attempt < 10
+        attempt < 10 ? retry : raise
       rescue Bunny::ConnectionClosedError => e
         attempt += 1
         sleep(0.001)
-        retry if attempt < 10
+        attempt < 10 ? retry : raise 
       end
     end
 
