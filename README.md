@@ -22,7 +22,7 @@ To install this plugin:
 # Installation
 
     gem install sevak
-    
+
 # Make sure the rabbitmq server is running
 
 You can either install and run the rabbitmq server from the appropriate package for your os or you can run the preconfigured docker image for local testing.
@@ -31,7 +31,7 @@ The image can be found here.
 
 https://hub.docker.com/r/deepakkumarnd/sevak/
 
-You can run the rabbitmq by doing the following step 
+You can run the rabbitmq by doing the following step
 
     docker pull deepakkumarnd/sevak
     docker run -d --name rabbitmq_test -p 15672:15672 -p 5672:5672 deepakkumarnd/sevak
@@ -98,3 +98,13 @@ https://hub.docker.com/r/deepakkumarnd/sevak/
 
 docker pull deepakkumarnd/sevak
 docker run -d --name rabbitmq_test -p 15672:15672 -p 5672:5672 deepakkumarnd/sevak
+
+### Enable consumers to spawn more than one processes
+
+We can also run the consumers as follows:
+
+$ RAILS_ENV={env} REPLICA={n} bundle exec rake consumer_name
+
+Where n is a number, the above command should spin up n number of consumer process.
+
+In effect REPLICA={n} should fork the consumer n times.

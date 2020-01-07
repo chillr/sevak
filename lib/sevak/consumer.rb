@@ -4,16 +4,15 @@ module Sevak
   # run method. The run method should implement the business logic.
 
   class ConsumerBase
-
     include Core
     include Autoscale
 
     DEFAULT_PREFETCH_COUNT = 10
 
     # class methods
-      def self.queue_name(name='default')
-        @queue_name ||= name
-      end
+    def self.queue_name(name='default')
+      @queue_name ||= name
+    end
     # end of class methods
 
     def initialize
@@ -37,7 +36,7 @@ module Sevak
     end
 
     def start
-      if config.autoscale
+      if config.autoscale || replicas_required
         start_master_worker
       else
         start_worker
@@ -45,13 +44,12 @@ module Sevak
     end
 
     def start_worker
+      load_rails_environment if defined?(Rails)
+
       channel.prefetch(config.prefetch_count || DEFAULT_PREFETCH_COUNT)
 
       queue.subscribe(manual_ack: true, exclusive: false) do |delivery_info, metadata, payload|
         body = JSON.parse(payload)
-
-        # p delivery_info
-        # p metadata
 
         begin
           status = run(body)
@@ -90,10 +88,14 @@ module Sevak
       "Sevak Exception: #{msg}"
     end
 
+    private
+
+    def load_rails_environment
+      require './config/environment'
+    end
   end
 
   class Consumer < ConsumerBase
-
     # Set the queue name for the consumer
     queue_name 'sevak.default'
 

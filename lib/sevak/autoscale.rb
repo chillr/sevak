@@ -26,7 +26,6 @@ module Sevak
         end
 
         pids.push(pid)
-
       rescue => e
         log("Unable to fork process #{e.message}")
       end
@@ -75,8 +74,20 @@ module Sevak
       end
     end
 
+    def replicas_required
+      ENV['REPLICA']
+    end
+
     def start_master_worker
-      fork_process
+      if replicas_required
+        replicas_required.to_i.times do
+          fork_process
+        end
+
+        Process.waitall
+      else
+        fork_process
+      end
 
       loop do
         avg_load = calculate_average_load
@@ -90,7 +101,7 @@ module Sevak
         end
 
         sleep 5
-      end
+      end unless ENV['REPLICA']
     rescue => e
       cleanup
     ensure

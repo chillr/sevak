@@ -1,8 +1,9 @@
 PATH
   remote: .
   specs:
-    sevak (0.5.3)
+    sevak (0.6.0)
       bunny (~> 2.7)
+      highline
 
 GEM
   remote: https://rubygems.org/
