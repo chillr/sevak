@@ -115,3 +115,4 @@ require 'sevak/core'
 require 'sevak/autoscale'
 require 'sevak/consumer'
 require 'sevak/publisher'
+require 'sevak/railtie' if defined?(Rails)

@@ -30,21 +30,21 @@ module Sevak
       exchange(queue_name).publish(message.to_json, headers: { 'x-delay' => delay })
     end
 
-  private
+    private
 
-      def self.publish_message(queue_name, message, delay = nil)
-        attempt = 0
-        begin
-          if delay.nil? 
-            instance.queue(queue_name).publish(message.to_json)
-          else
-            instance.publish_exchange(queue_name, message, delay.to_i)
-          end
-        rescue Bunny::ConnectionClosedError => e
-          attempt += 1
-          sleep(0.001)
-          attempt < 2 ? retry : raise
+    def self.publish_message(queue_name, message, delay = nil)
+      attempt = 0
+      begin
+        if delay.nil?
+          instance.queue(queue_name).publish(message.to_json)
+        else
+          instance.publish_exchange(queue_name, message, delay.to_i)
         end
+      rescue Bunny::ConnectionClosedError => e
+        attempt += 1
+        sleep(0.001)
+        attempt < 2 ? retry : raise
       end
+    end
   end
 end
